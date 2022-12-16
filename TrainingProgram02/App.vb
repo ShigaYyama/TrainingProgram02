@@ -1,4 +1,6 @@
 ﻿Imports System.Configuration
+Imports System.Diagnostics.Eventing.Reader
+Imports System.Text
 
 Public Class App
 
@@ -30,17 +32,31 @@ Public Class App
     'キーの存在確認
     Public Shared Sub ConfigCheck()
 
-        'すべてのキーとその値を取得して存在を確認
-        Dim key As String
-        For Each key In System.Configuration.ConfigurationManager.AppSettings.AllKeys
+        '取得するキー名を配列で配置
+        Dim KeyNameArry As String() = {"filePath", "bk_DirPath", "outputPath"}
 
-            If Not System.IO.Directory.Exists(System.Configuration.ConfigurationManager.AppSettings(key)) Then
-                MessageBox.Show("ファイルに指定されたキーが存在しません" & vbLf & "configファイルの内容を確認してください" & vbLf & "キー：" & key)
+        'すべてのキーを取得して、配列のキー名の存在を確認
+        Dim AllKeys As String
+        For Each AllKeys In System.Configuration.ConfigurationManager.AppSettings.AllKeys
+
+            Dim NameExis As Boolean = False
+
+            For Each ArryNames As String In KeyNameArry
+
+                If AllKeys = ArryNames Then
+                    NameExis = True
+                End If
+
+            Next
+
+            If NameExis = False Then
+                MessageBox.Show("ファイルに指定されたキーが存在しません" & vbLf & "configファイルの内容を確認してください" & vbLf & "キー：" & AllKeys)
             End If
-        Next key
 
-        'フォルダの存在を確認
-        Dim FolderName As String = ConfigurationManager.AppSettings("filePath")
+        Next
+
+            'フォルダの存在を確認
+            Dim FolderName As String = ConfigurationManager.AppSettings("filePath")
         If System.IO.Directory.Exists(FolderName) Then
             MessageBox.Show("'" + FolderName + "'は存在します。")
         Else
