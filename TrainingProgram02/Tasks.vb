@@ -25,6 +25,7 @@ Public Class Tasks
 
             End If
 
+
         Next
 
         'カウントが0 = ファイルが存在していない時、処理を中断する
