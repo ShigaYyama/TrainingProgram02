@@ -1,4 +1,6 @@
 ﻿Imports System.Configuration
+Imports System.Diagnostics.Eventing.Reader
+Imports System.Text
 
 Public Class App
 
@@ -37,16 +39,24 @@ Public Class App
         Dim AllKeys As String
         For Each AllKeys In System.Configuration.ConfigurationManager.AppSettings.AllKeys
 
-            If AllKeys <> KeyNameArry(0) And AllKeys <> KeyNameArry(1) And AllKeys <> KeyNameArry(2) Then
+            Dim NameExis As Boolean = False
 
+            For Each ArryNames As String In KeyNameArry
+
+                If AllKeys = ArryNames Then
+                    NameExis = True
+                End If
+
+            Next
+
+            If NameExis = False Then
                 MessageBox.Show("ファイルに指定されたキーが存在しません" & vbLf & "configファイルの内容を確認してください" & vbLf & "キー：" & AllKeys)
-
             End If
 
         Next
 
-        'フォルダの存在を確認
-        Dim FolderName As String = ConfigurationManager.AppSettings("filePath")
+            'フォルダの存在を確認
+            Dim FolderName As String = ConfigurationManager.AppSettings("filePath")
         If System.IO.Directory.Exists(FolderName) Then
             MessageBox.Show("'" + FolderName + "'は存在します。")
         Else
