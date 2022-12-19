@@ -44,10 +44,6 @@ Public Class App
 
         Next
 
-        If System.Configuration.ConfigurationManager.AppSettings.AllKeys.Length > KeyNameArry.Length Then
-            MessageBox.Show("ファイルに指定されたキーが指定数より多いです" & vbLf & "configファイルの内容を確認してください")
-        End If
-
 
         'フォルダの存在を確認
         Dim FolderName As String = ConfigurationManager.AppSettings("filePath")
