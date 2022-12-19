@@ -1,6 +1,5 @@
-﻿Imports System.Configuration
-Imports System.Diagnostics.Eventing.Reader
-Imports System.Text
+Imports System.Collections.Specialized
+Imports System.Configuration
 
 Public Class App
 
@@ -35,28 +34,19 @@ Public Class App
         '取得するキー名を配列で配置
         Dim KeyNameArry As String() = {"filePath", "bk_DirPath", "outputPath"}
 
-        'すべてのキーを取得して、配列のキー名の存在を確認
-        Dim AllKeys As String
-        For Each AllKeys In System.Configuration.ConfigurationManager.AppSettings.AllKeys
+        For Each Keys As String In KeyNameArry
 
-            Dim NameExis As Boolean = False
+            If Array.IndexOf(System.Configuration.ConfigurationManager.AppSettings.AllKeys, Keys) = -1 Then
 
-            For Each ArryNames As String In KeyNameArry
+                MessageBox.Show("ファイルに指定されたキーが存在しません" & vbLf & "configファイルの内容を確認してください" & vbLf & "キー：" & Keys)
 
-                If AllKeys = ArryNames Then
-                    NameExis = True
-                End If
-
-            Next
-
-            If NameExis = False Then
-                MessageBox.Show("ファイルに指定されたキーが存在しません" & vbLf & "configファイルの内容を確認してください" & vbLf & "キー：" & AllKeys)
             End If
 
         Next
 
-            'フォルダの存在を確認
-            Dim FolderName As String = ConfigurationManager.AppSettings("filePath")
+
+        'フォルダの存在を確認
+        Dim FolderName As String = ConfigurationManager.AppSettings("filePath")
         If System.IO.Directory.Exists(FolderName) Then
             MessageBox.Show("'" + FolderName + "'は存在します。")
         Else
