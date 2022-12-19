@@ -4,7 +4,7 @@ Imports System.Text
 Public Class Tasks
 
     'ファイル名の配列
-    Shared FileName() As String = {"En.txt", "FF4.txt", "Fn.txt", "Kn.Csv"}
+    Shared FileName() As String = {"En1.txt", "FF41.txt", "Fn1.txt", "Kn.csv"}
 
     'ファイルの存在確認
     Public Shared Function FileExistCheck() As Boolean
@@ -75,6 +75,7 @@ Public Class Tasks
             If Not System.IO.File.Exists(CopyPath) Then
 
                 '存在しなければ、プログレスバーの値を+1して処理を次に回す
+                MessageBox.Show(Names & "ファイルは存在していません。")
                 ProgNum = ProgNum + 1
 
             Else
@@ -109,20 +110,26 @@ Public Class Tasks
                             '数値の変換処理(1～9までを反転して置き換える)
                             'StringBuilderクラスを用いることで処理を高速化
                             For c As Integer = 0 To StrArray(1).Length - 1
-                                Dim SeachInt As Integer = Integer.Parse(StrArray(1)(c))
+                                Dim SeachInt As Integer
+                                Dim i As Integer
 
-                                If SeachInt >= 1 And SeachInt <= 9 Then
-                                    For i As Integer = 1 To 9
-
-                                        If SeachInt = i Then
-
-                                            ChangeStr.Append(CStr(10 - i))
-
-                                        End If
-
-                                    Next
+                                '文字が数字に変換できるか判断、変換できない場合は、10を代入(変換対象外の数値)
+                                If Integer.TryParse(StrArray(1)(c), i) Then
+                                    SeachInt = Integer.Parse(StrArray(1)(c))
                                 Else
+                                    SeachInt = 10
+                                End If
+
+                                '数値を判別、文字の場合はそのまま文字として返す
+                                If SeachInt >= 1 And SeachInt <= 9 Then
+                                    ChangeStr.Append(CStr(10 - SeachInt))
+
+                                ElseIf SeachInt = 0 Then
                                     ChangeStr.Append("0")
+
+                                Else
+                                    ChangeStr.Append(StrArray(1)(c))
+
                                 End If
 
                             Next
@@ -153,8 +160,7 @@ Public Class Tasks
 
                 Catch Ex As Exception
 
-                    Console.WriteLine("The file could not be read:")
-                    Console.WriteLine(Ex.Message)
+                    MessageBox.Show(Ex.Message & vbLf & Names & "の内容を確認してください。")
 
                 End Try
 
