@@ -106,30 +106,19 @@ Public Class Tasks
                             '文字列を分割して配列にセット
                             StrArray = ReadRow.Split(StrSplit)
 
-
                             '数値の変換処理(1～9までを反転して置き換える)
                             'StringBuilderクラスを用いることで処理を高速化
                             For c As Integer = 0 To StrArray(1).Length - 1
                                 Dim SeachInt As Integer
-                                Dim i As Integer
 
                                 '文字が数字に変換できるか判断、変換できない場合は、10を代入(変換対象外の数値)
-                                If Integer.TryParse(StrArray(1)(c), i) Then
-                                    SeachInt = Integer.Parse(StrArray(1)(c))
-                                Else
-                                    SeachInt = 10
-                                End If
-
                                 '数値を判別、文字の場合はそのまま文字として返す
-                                If SeachInt >= 1 And SeachInt <= 9 Then
+                                If StrArray(1)(c) >= "1" And StrArray(1)(c) <= "9" Then
+                                    SeachInt = Integer.Parse(StrArray(1)(c))
+
                                     ChangeStr.Append(CStr(10 - SeachInt))
-
-                                ElseIf SeachInt = 0 Then
-                                    ChangeStr.Append("0")
-
                                 Else
                                     ChangeStr.Append(StrArray(1)(c))
-
                                 End If
 
                             Next
