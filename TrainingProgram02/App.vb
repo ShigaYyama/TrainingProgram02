@@ -48,6 +48,7 @@ Public Class App
             MessageBox.Show("ファイルに指定されたキーが指定数より多いです" & vbLf & "configファイルの内容を確認してください")
         End If
 
+
         'フォルダの存在を確認
         Dim FolderName As String = ConfigurationManager.AppSettings("filePath")
         If System.IO.Directory.Exists(FolderName) Then
