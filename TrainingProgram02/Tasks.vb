@@ -4,10 +4,12 @@ Imports System.Text
 Public Class Tasks
 
     'ファイル名の配列
-    Shared FileName() As String = {"En.txt", "FF4.txt", "Fn.txt", "Kn.csv"}
+    Shared FileName() As String = {"En.txt", "FF4.txt", "Fn.txt", "Kn.Csv"}
 
     'ファイルの存在確認
-    Public Shared Sub FileExistCheck()
+    Public Shared Function FileExistCheck() As Boolean
+
+        FileExistCheck = True
 
         Dim FileCount As Integer = 0
 
@@ -28,15 +30,15 @@ Public Class Tasks
 
         Next
 
-        'カウントが0 = ファイルが存在していない時、処理を中断する
+        'カウントが0 = ファイルが一つも存在していない時、処理を中断する
         If FileCount = 0 Then
 
             MessageBox.Show("処理対象のファイルが存在しません")
-            Exit Sub
+            Return False
 
         End If
 
-    End Sub
+    End Function
 
 
     'データ出力処理
@@ -82,24 +84,23 @@ Public Class Tasks
                     '存在したら、データを読み込む
                     Using ReadFile As New System.IO.StreamReader(CopyPath, System.Text.Encoding.GetEncoding("shift_jis"))
 
+                        Dim StrSplit As String = Nothing
+                        '拡張子の判別
+                        '.csvの場合は、テキストを","で区切る
+                        If System.IO.Path.GetExtension(CopyPath).ToLower = ".csv".ToLower Then
+                            StrSplit = ","
+                        Else
+                            '.csv以外の場合は、テキストをタブで区切る
+                            StrSplit = vbTab
+                        End If
+
                         '内容を一行ずつ読み込む
                         While ReadFile.Peek() > -1
 
                             Dim ReadRow As String = ReadFile.ReadLine()
                             Dim StrArray() As String = Nothing
-                            Dim StrSplit As String = Nothing
 
                             Dim ChangeStr As New System.Text.StringBuilder()
-
-                            '拡張子の判別
-                            '.csvの場合は、テキストを","で区切る
-                            If System.IO.Path.GetExtension(CopyPath) = ".csv" Then
-                                StrSplit = ","
-
-                            Else
-                                '.csv以外の場合は、テキストをタブで区切る
-                                StrSplit = vbTab
-                            End If
 
                             '文字列を分割して配列にセット
                             StrArray = ReadRow.Split(StrSplit)
