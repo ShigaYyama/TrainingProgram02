@@ -87,7 +87,7 @@ Public Class Tasks
                         Dim StrSplit As String = Nothing
                         '拡張子の判別
                         '.csvの場合は、テキストを","で区切る
-                        If System.IO.Path.GetExtension(CopyPath).ToLower = ".csv".ToLower Then
+                        If System.IO.Path.GetExtension(CopyPath).ToLower = ".csv" Then
                             StrSplit = ","
                         Else
                             '.csv以外の場合は、テキストをタブで区切る
