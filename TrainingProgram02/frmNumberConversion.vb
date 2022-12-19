@@ -21,7 +21,9 @@ Public Class frmNumberConversion
     Private Sub btnExecution_Click(sender As Object, e As EventArgs) Handles btnExecution.Click
 
         'ファイルの存在を確認
-        Tasks.FileExistCheck()
+        If Tasks.FileExistCheck() = False Then
+            Exit Sub
+        End If
 
         '変換→出力処理
         Tasks.Output()
