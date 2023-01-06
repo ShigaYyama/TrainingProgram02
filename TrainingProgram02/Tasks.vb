@@ -4,7 +4,7 @@ Imports System.Text
 Public Class Tasks
 
     'ファイル名の配列
-    Shared FileName() As String = {"En1.txt", "FF41.txt", "Fn1.txt", "Kn.csv"}
+    Shared FileName() As String = {"En.txt", "FF4.txt", "Fn.txt", "Kn.csv"}
 
     'ファイルの存在確認
     Public Shared Function FileExistCheck() As Boolean
@@ -111,7 +111,6 @@ Public Class Tasks
                             For c As Integer = 0 To StrArray(1).Length - 1
                                 Dim SeachInt As Integer
 
-                                '文字が数字に変換できるか判断、変換できない場合は、10を代入(変換対象外の数値)
                                 '数値を判別、文字の場合はそのまま文字として返す
                                 If StrArray(1)(c) >= "1" And StrArray(1)(c) <= "9" Then
                                     SeachInt = Integer.Parse(StrArray(1)(c))
@@ -136,26 +135,43 @@ Public Class Tasks
                         End While
 
 
-                        '格納した文字列の表をテキストへ出力
-                        Using FileWrite As New System.IO.StreamWriter(OPPath, False, System.Text.Encoding.GetEncoding("shift_jis"))
+                        Try
 
-                            FileWrite.WriteLine(ConnectData)
+                            '格納した文字列の表をテキストへ出力
+                            Using FileWrite As New System.IO.StreamWriter(OPPath, False, System.Text.Encoding.GetEncoding("shift_jis"))
 
-                        End Using
+                                FileWrite.WriteLine(ConnectData)
 
-                        '読み込んだファイルを閉じる
+                            End Using
+
+                        Catch Ex As Exception
+
+                            MessageBox.Show("ファイルの保存に失敗しました。" & vbLf & "ファイル名：" & OPPath)
+                            Exit Sub
+
+                        End Try
 
                     End Using
 
                 Catch Ex As Exception
 
                     MessageBox.Show(Ex.Message & vbLf & Names & "の内容を確認してください。")
+                    Exit Sub
 
                 End Try
 
-                'INPUTフォルダのデータを、BACKUPフォルダに移動して、ファイル名の前に日付を足して保存
-                System.IO.File.Move(CopyPath, BUPath)
-                My.Computer.FileSystem.RenameFile(BUPath, DateTime.Now.ToString("yyyyMMddHHmmss") & "_" & Names)
+                Try
+
+                    'INPUTフォルダのデータを、BACKUPフォルダに移動して、ファイル名の前に日付を足して保存
+                    System.IO.File.Move(CopyPath, BUPath)
+                    My.Computer.FileSystem.RenameFile(BUPath, DateTime.Now.ToString("yyyyMMddHHmmss") & "_" & Names)
+
+                Catch Ex As Exception
+
+                    MessageBox.Show("ファイルの移動に失敗しました。" & vbLf & "移動元ファイル名：" & CopyPath & vbLf & "移動先ファイル名：" & BUPath)
+                    Exit Sub
+
+                End Try
 
                 'プログレスバーの値を+1して処理を次に回す
                 ProgNum = ProgNum + 1
@@ -174,6 +190,7 @@ Public Class Tasks
             End If
 
         Next
+
     End Sub
 
 End Class
