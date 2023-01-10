@@ -8,7 +8,7 @@ Public Class App
         DuplicateCheck = False
 
         'ミューテックスインスタンス生成
-        Dim AppMutex As New System.Threading.Mutex(False, Application.ProductName)
+        Dim appMutex As New System.Threading.Mutex(False, Application.ProductName)
 
         If AppMutex.WaitOne(0, False) Then
 
@@ -32,7 +32,7 @@ Public Class App
     Public Shared Sub ConfigCheck()
 
         '取得するキー名を配列で配置
-        Dim KeyNameArry As String() = {"filePath", "bk_DirPath", "outputPath"}
+        Dim keyNameArry As String() = {"filePath", "bk_DirPath", "outputPath"}
 
         For Each Keys As String In KeyNameArry
 
@@ -46,7 +46,7 @@ Public Class App
 
 
         'フォルダの存在を確認
-        Dim FolderName As String = ConfigurationManager.AppSettings("filePath")
+        Dim folderName As String = ConfigurationManager.AppSettings("filePath")
         If System.IO.Directory.Exists(FolderName) Then
             MessageBox.Show("'" + FolderName + "'は存在します。")
         Else
