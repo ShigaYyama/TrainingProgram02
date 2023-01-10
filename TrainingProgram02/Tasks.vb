@@ -106,6 +106,11 @@ Public Class Tasks
                             '文字列を分割して配列にセット
                             StrArray = ReadRow.Split(StrSplit)
 
+                            '配列数(分割したテキスト数)が2つより少ない時は、次の行(ループ)に回す
+                            If StrArray.Length < 2 Then
+                                Continue While
+                            End If
+
                             '数値の変換処理(1～9までを反転して置き換える)
                             'StringBuilderクラスを用いることで処理を高速化
                             For c As Integer = 0 To StrArray(1).Length - 1
@@ -140,6 +145,8 @@ Public Class Tasks
                             '格納した文字列の表をテキストへ出力
                             Using FileWrite As New System.IO.StreamWriter(OPPath, False, System.Text.Encoding.GetEncoding("shift_jis"))
 
+                                '最終行を削除
+                                ConnectData.Remove(ConnectData.Length - 1, 1)
                                 FileWrite.WriteLine(ConnectData)
 
                             End Using
@@ -163,8 +170,10 @@ Public Class Tasks
                 Try
 
                     'INPUTフォルダのデータを、BACKUPフォルダに移動して、ファイル名の前に日付を足して保存
-                    System.IO.File.Move(CopyPath, BUPath)
-                    My.Computer.FileSystem.RenameFile(BUPath, DateTime.Now.ToString("yyyyMMddHHmmss") & "_" & Names)
+
+                    Dim buFileName As String = DateTime.Now.ToString("yyyyMMddHHmmss") & "_" & Names
+
+                    System.IO.File.Move(CopyPath, "C:\Users\jmc_p\Desktop\識別変換プログラム\BACKUP\" & buFileName)
 
                 Catch Ex As Exception
 
@@ -173,23 +182,33 @@ Public Class Tasks
 
                 End Try
 
-                'プログレスバーの値を+1して処理を次に回す
-                ProgNum = ProgNum + 1
+
+                Try
+
+                    'プログレスバーの値を+1して処理を次に回す
+                    ProgNum = ProgNum + 1
+
+                Catch ex As Exception
+
+                    Exit Sub
+
+                End Try
+
 
             End If
 
             'プログレスバーの値を代入
             frmProgress.progressBar.Value = ProgNum
 
-            'プログレスバーの値が4(最大値)に達した時、プログレスフォームを閉じる
-            If ProgNum = frmProgress.progressBar.Maximum Then
-                System.Threading.Thread.Sleep(1500)
-                MessageBox.Show("ファイルの変換が完了しました")
-                frmProgress.Close()
-
-            End If
-
         Next
+
+        'プログレスバーの値が4(最大値)に達した時、プログレスフォームを閉じる
+        If ProgNum = frmProgress.progressBar.Maximum Then
+            System.Threading.Thread.Sleep(1500)
+            MessageBox.Show("ファイルの変換が完了しました")
+            frmProgress.Close()
+
+        End If
 
     End Sub
 
