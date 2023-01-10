@@ -67,7 +67,7 @@ Public Class Tasks
                 OPPath = ConfigurationManager.AppSettings("outputPath") & "\" & Names
 
                 Dim BUPath As String
-                BUPath = ConfigurationManager.AppSettings("bk_DirPath") & "\" & Names
+                BUPath = ConfigurationManager.AppSettings("bk_DirPath") & "\" & DateTime.Now.ToString("yyyyMMddHHmmss") & "_" & Names
 
                 Dim ConnectRow As String = Nothing
                 Dim ConnectData As New StringBuilder
@@ -168,8 +168,7 @@ Public Class Tasks
                     Try
 
                         'INPUTフォルダのデータを、BACKUPフォルダに移動して、ファイル名の前に日付を足して保存
-                        Dim buFileName As String = DateTime.Now.ToString("yyyyMMddHHmmss") & "_" & Names
-                        System.IO.File.Move(CopyPath, ConfigurationManager.AppSettings("bk_DirPath") & "\" & buFileName)
+                        System.IO.File.Move(CopyPath, BUPath)
 
                     Catch Ex As Exception
 
